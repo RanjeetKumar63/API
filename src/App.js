@@ -1,23 +1,56 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import Product from "./Product";
+import { useEffect, useState } from "react";
 
 function App() {
+  let [productVisible, setProductVisible] = useState(false);
+
+  let [users, setUsers] = useState([]);
+
+  useEffect(() => {
+    fetch("https://jsonplaceholder.typicode.com/users")
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        setUsers(data);
+        users = data;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>Welcome</h1>
+      <button
+        onClick={() => {
+          setProductVisible(true);
+        }}
+      >
+        Show Product
+      </button>
+      <button
+        onClick={() => {
+          setProductVisible(false);
+        }}
+      >
+        Hide Product
+      </button>
+      {productVisible === true ? <Product /> : null}
+      {/* <Product /> */}
+
+      <div className="ui">
+        {users.map((user, index) => {
+          return (
+            <div className="user" key={index}>
+              <h1>{user.name}</h1>
+              <h3>{user.username}</h3>
+              <h4>{user.website}</h4>
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 }
